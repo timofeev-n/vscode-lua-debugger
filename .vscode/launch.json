@@ -1,0 +1,45 @@
+// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+{
+  "version": "0.2.0",
+  "configurations": [
+  {
+    "name": "Extension",
+    "type": "extensionHost",
+    "sourceMaps": true,
+    "request": "launch",
+    "runtimeExecutable": "${execPath}",
+//    "preLaunchTask": "npm: build-dev",
+    "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}"
+    ],
+    "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+    ]
+  },
+  {
+    "name": "Adapter",
+    "type": "node",
+    "request": "launch",
+    "cwd": "${workspaceFolder}",
+    "program": "${workspaceFolder}/dist/adapter.js",
+    "args": [
+        "--server=4711",
+        "--plrx_remoting_transport=ipc",
+        "--plrx_remoting_host=.",
+        "--plrx_remoting_service=default_host"
+    ],
+    "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+    ]
+  }
+  ],
+  "compounds": [
+      {
+          "name": "Extension + Adapter",
+          "configurations": [
+              "Extension",
+              "Adapter"
+          ]
+      }
+  ]
+}

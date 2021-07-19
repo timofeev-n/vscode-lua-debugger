@@ -1,0 +1,33 @@
+{
+    "compilerOptions": {
+        "composite": false,
+        "preserveSymlinks": true,
+        "module": "ES2015",
+        "moduleResolution": "node",
+        "target": "es6",
+        "lib": [
+            "es6",
+            "es2018"
+        ],
+        "strictNullChecks": true,
+        "sourceMap": true,
+        "declaration": false,
+        //"rootDir": "./src",
+        "sourceRoot": "./src",
+        "experimentalDecorators": true,
+
+        "strict": true,   /* enable all strict type-checking options */
+        "noImplicitAny": false,
+        "noImplicitThis": true,
+        "noUnusedLocals": false
+        
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        ".vscode-test"
+    ]
+
+}

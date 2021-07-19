@@ -1,0 +1,130 @@
+{
+  "name": "playrix.script-debugger",
+  "displayName": "Playrix lua debugger",
+  "description": "Debug lua scripts.",
+  "version": "0.30.1",
+  "publisher": "playrix",
+  "author": {
+    "name": "playrix"
+  },
+  "playrix": {
+    "adapterSeparateProcess": false,
+    "remoting": {
+      "transport": "ipc",
+      "host": "",
+      "service": "lua-debugger-pipe"
+    }
+  },
+  "icon": "playrix.png",
+  "engines": {
+    "vscode": "^1.45.1"
+  },
+  "categories": [
+    "Debuggers"
+  ],
+  "activationEvents": [
+    "onDebug",
+    "onCommand:extension.playrix-luadebugger.testCommand"
+  ],
+  "main": "dist/extension",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.playrix-luadebugger.testCommand",
+        "title": "Playrix: Attach Script Debugger2"
+      }
+    ],
+    "breakpoints": [
+      {
+        "language": "lua"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "playrix-lua",
+        "label": "Playrix lua debugger",
+        "program": "dist/adapter",
+        "runtime": "node",
+        "languages": [
+          "lua"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "scriptNames"
+            ],
+            "properties": {
+              "scriptNames": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Absolute paths to multiply scrips",
+                "default": [
+                  "${file}"
+                ]
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "playrix-lua",
+            "request": "launch",
+            "name": "---",
+            "scriptNames": [
+              "${file}"
+            ]
+          }
+        ],
+        "configurationSnippets": [
+          {
+            "label": "Playrix: Launch",
+            "description": "A new configuration for lua launch and debug",
+            "body": {
+              "type": "playrix-lua",
+              "request": "launch",
+              "name": "Start ",
+              "scriptNames": [
+                "${workspaceRoot}/scriptname.lua"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "build-dev": "webpack --mode development",
+    "watch-dev": "webpack --mode development -w",
+    "build-prod": "tsc -b tsconfig-modules.json && webpack --mode production",
+    "watch": "tsc -b tsconfig-modules.json && webpack --watch --mode development",
+    "buildmodules": "tsc -b tsconfig-modules.json",
+    "atchmodules": "tsc -b -w tsconfig-modules.json",
+    "vscode:prepublish": "tsc -b tsconfig-modules.json && webpack --mode production",
+    "postinstall_": "node ./node_modules/vscode/bin/install",
+    "test": "yarn run build-dev && node ./node_modules/vscode/bin/test",
+    "create-types": "node ./out/dev-utils/create-types --path=keywords.xml"
+  },
+  "devDependencies": {
+    "@types/mocha": "^2.2.42",
+    "@types/node": "^16.3.1",
+    "@types/vscode": "^1.58.0",
+    "copy-webpack-plugin": "^9.0.1",
+    "eslint": "^7.30.0",
+    "generate-json-webpack-plugin": "^2.0.0",
+    "source-map-loader": "^3.0.0",
+    "ts-loader": "^9.2.3",
+    "typescript": "^4.3.5",
+    "webpack": "^5.44.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-merge": "^5.8.0",
+    "webpack-nano": "^1.1.1",
+    "xml2js": "^0.4.19"
+  },
+  "dependencies": {
+    "rxjs": "^7.2.0",
+    "vscode-debugadapter": "^1.47.0",
+    "vscode-debugprotocol": "^1.47.0"
+  }
+}
