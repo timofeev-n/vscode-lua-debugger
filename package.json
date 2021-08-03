@@ -65,6 +65,13 @@
                 ]
               }
             }
+          },
+
+          "attach": {
+            "required": [],
+            "properties": {
+            }
+
           }
         },
         "initialConfigurations": [

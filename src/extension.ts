@@ -5,8 +5,11 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { ScriptDebuggerSession } from './adapter/scriptdebugger-session';
-import * as DebuggerHost from './playrix/debuggerhost';
+import * as DebuggerHost from './playrix/dapmessagestream';
 import { PlayrixConfig } from './common/playrixconfig';
+
+import { IoStream, Client, nodeTransportFactory } from './network';
+// import {} from './'
 
 let thisExtension__: vscode.Extension<any> | undefined ;
 
@@ -74,17 +77,17 @@ class PlayrixDebugConfigurationProvider implements vscode.DebugConfigurationProv
 
 		let error: string | undefined;
 		let location: DebuggerHost.Target|undefined;
-		let debuggerHost: DebuggerHost.DebuggerHost | null = null;
+		// let debuggerHost: DebuggerHost.DebuggerHost | null = null;
 
 		if (!configuration.type) {
-			configuration.type = 'efs';
+			configuration.type = 'playrix-lua';
 		}
 
 		if (!configuration.request) {
 			configuration.request = 'launch';
 		}
 
-		if (DebuggerHost.isLaunchConfiguration(configuration)) {
+		// if (DebuggerHost.isLaunchConfiguration(configuration)) {
 
 			if (!configuration.scriptNames ) {
 				configuration.scriptNames = [];
@@ -92,28 +95,28 @@ class PlayrixDebugConfigurationProvider implements vscode.DebugConfigurationProv
 
 			if (configuration.scriptNames.length === 0) {
 				const editor = vscode.window.activeTextEditor;
-				if (editor && editor.document.languageId === 'javascript') {
+				if (editor && editor.document.languageId === 'lua') {
 					configuration.scriptNames.push('${file}');
 				}
 			}
 
-			if (configuration.scriptNames.length === 0) {
-				vscode.window.showErrorMessage('No scripts to run');
-				return undefined;
-			}
+		// 	// if (configuration.scriptNames.length === 0) {
+		// 	// 	vscode.window.showErrorMessage('No scripts to run');
+		// 	// 	return undefined;
+		// 	// }
 
-			for (let i = 0; i < configuration.scriptNames.length; ++i) {
-				const scriptName = configuration.scriptNames[i];
+		// 	// for (let i = 0; i < configuration.scriptNames.length; ++i) {
+		// 	// 	const scriptName = configuration.scriptNames[i];
 
-				if (path.isAbsolute(scriptName) || scriptName.indexOf('$') >= 0) {
-					continue;
-				}
+		// 	// 	if (path.isAbsolute(scriptName) || scriptName.indexOf('$') >= 0) {
+		// 	// 		continue;
+		// 	// 	}
 
-				const fullPath = path.normalize(path.join(getWorkspaceRootPath(), scriptName));
+		// 	// 	const fullPath = path.normalize(path.join(getWorkspaceRootPath(), scriptName));
 
-				configuration.scriptNames[i] = fullPath;
-			}
-		}
+		// 	// 	configuration.scriptNames[i] = fullPath;
+		// 	// }
+		// }
 
 		try {
 
@@ -164,6 +167,38 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(
 		vscode.commands.registerTextEditorCommand('extension.playrix-luadebugger.testCommand', () => {
+			console.log('Start interaction');
+
+			// (async (): Promise<void> => {
+			// 	const client = nodeTransportFactory().createClient();
+			// 	try {
+			// 		//await client.connect('ipc://.', 'playrixcontroller');
+			// 		await client.connect('tcp://', '8845');
+
+			// 		// const packet = HttpPacketBuilder.makeRequest(
+			// 		// 	'Method1', 
+			// 		// 	{
+			// 		// 		'Content-Type': 'application/json'
+			// 		// 	},
+			// 		// 	{
+			// 		// 		Arguments: [
+			// 		// 			1, 2, 'stringvalue'
+			// 		// 		]
+			// 		// 	});
+
+			// 		// await client.write(packet.toBuffer());
+
+			// 		client.close();
+
+			// 		console.log('done');
+			// 	}
+			// 	catch (error: unknown) {
+			// 		console.log('Something is wrong');
+			// 	}
+				
+				
+			// })();
+
 		})
 	);
 
